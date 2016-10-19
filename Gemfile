@@ -45,3 +45,10 @@ group :test do
   gem 'launchy'
   gem 'selenium-webdriver'
 end
+
+gem 'ckeditor_rails'
+gem 'workflow'
+gem 'rest-client'
+gem 'acts-as-taggable-on', '~> 3.5'
+gem 'pry'
+gem 'cancancan', '~> 1.10'

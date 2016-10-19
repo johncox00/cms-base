@@ -1,0 +1,35 @@
+%p#notice= notice
+
+%p
+  %b Identifier:
+  = @content_item.identifier
+%p
+  %b Container:
+  = @content_item.container_id
+%p
+  %b Description:
+  = @content_item.description
+
+%br
+%br
+%h2 Revision History
+= link_to '+ New Revision', content_item_content_item_revisions_path(@content_item)
+%table.table.table-striped
+  %thead
+    %tr
+      %th Last Update
+      %th Creator
+      %th Description
+      %th Change Set
+  - @content_item.content_item_revisions.each do |rev|
+    %tr
+      %td= rev.updated_at
+      %td= rev.creator.email if rev.creator
+      %td= link_to rev.identifier, content_item_content_item_revision_path(@content_item, rev)
+      %td= link_to rev.change_set.name, rev.change_set
+
+
+
+= link_to 'Edit', edit_content_item_path(@content_item)
+\|
+= link_to 'Back', content_items_path

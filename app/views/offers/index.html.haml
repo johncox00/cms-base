@@ -1,0 +1,19 @@
+%h1 Offers
+= link_to '+ New', new_offer_path
+%br
+%br
+%table.table.table-striped
+  %thead
+    %tr
+      %th Identifier
+      %th Type
+      %th Active
+
+  %tbody
+    - @offers.each do |offer|
+      %tr
+        %td= offer['identifier']
+        %td= offer['offer_type']
+        %td= offer['active']
+
+%br

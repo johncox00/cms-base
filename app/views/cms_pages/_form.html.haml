@@ -1,0 +1,19 @@
+= form_for @cms_page do |f|
+  - if @cms_page.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@cms_page.errors.count, "error")} prohibited this cms_page from being saved:"
+      %ul
+        - @cms_page.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :name
+    = f.text_field :name, class: 'form-control'
+  .field
+    = f.label :path
+    = f.text_field :path, class: 'form-control'
+  .field
+    = f.label :locale
+    = f.text_field :locale, class: 'form-control'
+  .actions
+    = f.submit 'Save'

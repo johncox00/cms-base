@@ -1,0 +1,24 @@
+%h1 Change Sets
+
+= link_to('+ New Change set', new_change_set_path) if can?(:create, ChangeSet)
+%br
+%br
+%ul#changeset_tabs.nav.nav-tabs{:role => "tablist"}
+  %li.active{:role => "presentation"}
+    %a{"aria-controls" => "active", "data-toggle" => "tab", :href => "#active", :role => "tab"} Current
+  %li{:role => "presentation"}
+    %a{"aria-controls" => "future", "data-toggle" => "tab", :href => "#future", :role => "tab"} Future
+  %li{:role => "presentation"}
+    %a{"aria-controls" => "past", "data-toggle" => "tab", :href => "#past", :role => "tab"} Past
+
+/ Tab panes
+.tab-content
+  #active.tab-pane.active{:role => "tabpanel"}
+    = render partial: 'cs_table', locals: {change_sets: @current_change_sets}
+  #future.tab-pane{:role => "tabpanel"}
+    = render partial: 'cs_table', locals: {change_sets: @future_change_sets}
+  #past.tab-pane{:role => "tabpanel"}
+    = render partial: 'cs_table', locals: {change_sets: @past_change_sets}
+
+
+%br

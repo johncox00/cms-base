@@ -1,0 +1,12 @@
+%td
+  = link_to user.email, user
+%td
+  = form_for(user) do |f|
+    - User.available_roles.each do |role|
+      .checkbox
+        %label
+          = check_box_tag "#{role}--#{user.id}", role, user.role_list.include?(role), {class: 'role-check'}
+          = role.titlecase
+    =# f.submit 'Change Roles', :class => 'button-xs'
+%td
+  = link_to("Delete user", user_path(user), :data => { :confirm => "Are you sure?" }, :method => :delete, :class => 'button-xs') unless user == current_user

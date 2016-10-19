@@ -1,0 +1,25 @@
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Created by
+      %th Active at
+      %th Inactive at
+      %th Content Items
+      %th State
+      %th
+      %th
+      %th
+
+  %tbody
+    - change_sets.each do |change_set|
+      %tr
+        %td= link_to "#{change_set.name}", change_set
+        %td= change_set.owner.email
+        %td= change_set.active_at
+        %td= change_set.inactive_at
+        %td= change_set.content_item_revisions.count
+        %td= change_set.workflow_state.split('_').join(' ')
+        %td= link_to('Edit', edit_change_set_path(change_set)) if can?(:update, change_set)
+        %td= link_to('Delete', change_set, :method => :delete, :data => { :confirm => 'Are you sure?' }) if can?(:destroy, change_set)
+        %td= link_to 'Preview', change_set

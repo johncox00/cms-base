@@ -1,0 +1,45 @@
+%p#notice= notice
+
+%p
+  %b Created by:
+  = @change_set.created_by
+%p
+  %b Active at:
+  = @change_set.active_at
+%p
+  %b Inactive at:
+  = @change_set.inactive_at
+- if can? :update, @change_set
+  = link_to 'Edit', edit_change_set_path(@change_set)
+  \|
+= link_to 'Back', change_sets_path
+
+
+%h2 Content Revisions
+%table.table.table-striped
+  - @change_set.content_item_revisions.each do |cs|
+    %tr
+      %td
+        %b Old
+      %td
+        %b New
+    %tr
+      %td
+        - old = cs.parent
+        - if old
+          %b= old.identifier
+          %br
+          = raw(old.content)
+          %br
+        - else
+          (none)
+      %td
+        %b= cs.identifier
+        %br
+        = raw(cs.content)
+        %br
+- if can? :accept, @change_set
+  = link_to 'Accept', accept_change_set_path(@change_set), method: 'put'
+  \|
+- if can? :reject, @change_set
+  = link_to 'Reject', reject_change_set_path(@change_set), method: 'put'

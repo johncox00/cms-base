@@ -11,7 +11,84 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160720192919) do
+ActiveRecord::Schema.define(version: 20160726221815) do
+
+  create_table "change_sets", force: :cascade do |t|
+    t.integer  "created_by"
+    t.datetime "active_at"
+    t.datetime "inactive_at"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "name"
+    t.string   "workflow_state", default: "new"
+  end
+
+  create_table "cms_pages", force: :cascade do |t|
+    t.string   "name",                      null: false
+    t.string   "path",                      null: false
+    t.string   "locale",     default: "en"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  create_table "cms_pages_content_items", force: :cascade do |t|
+    t.integer  "cms_page_id"
+    t.integer  "content_item_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "cms_pages_content_items", ["cms_page_id"], name: "index_cms_pages_content_items_on_cms_page_id"
+  add_index "cms_pages_content_items", ["content_item_id"], name: "shorter_index"
+
+  create_table "content_item_revisions", force: :cascade do |t|
+    t.text     "content"
+    t.integer  "content_item_revision_id"
+    t.integer  "created_by"
+    t.integer  "last_modified_by"
+    t.integer  "change_set_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.string   "identifier"
+    t.string   "workflow_state"
+    t.integer  "content_item_id"
+  end
+
+  add_index "content_item_revisions", ["change_set_id"], name: "index_content_item_revisions_on_change_set_id"
+  add_index "content_item_revisions", ["content_item_revision_id"], name: "index_content_item_revisions_on_content_item_revision_id"
+
+  create_table "content_items", force: :cascade do |t|
+    t.string   "identifier"
+    t.integer  "container_id"
+    t.string   "description"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "offers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "taggings", force: :cascade do |t|
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.integer  "tagger_id"
+    t.string   "tagger_type"
+    t.string   "context",       limit: 128
+    t.datetime "created_at"
+  end
+
+  add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+  add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
+
+  create_table "tags", force: :cascade do |t|
+    t.string  "name"
+    t.integer "taggings_count", default: 0
+  end
+
+  add_index "tags", ["name"], name: "index_tags_on_name", unique: true
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -31,7 +108,6 @@ ActiveRecord::Schema.define(version: 20160720192919) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.integer  "role"
     t.string   "invitation_token"
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"

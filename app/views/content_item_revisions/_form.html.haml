@@ -1,0 +1,25 @@
+= form_for [@content_item,@content_item_revision] do |f|
+  - if @content_item_revision.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@content_item_revision.errors.count, "error")} prohibited this content_item_revision from being saved:"
+      %ul
+        - @content_item_revision.errors.full_messages.each do |msg|
+          %li= msg
+
+
+  .field
+    = f.label "Description"
+    = f.text_field :identifier, class: 'form-control'
+  .field
+    = f.label :content
+    = f.text_area :content, class: 'ckeditor'
+  .field
+    = f.label :parent
+    - if @content_item_revision.parent
+      = f.hidden_field :content_item_revision_id, value: @content_item_revision.parent.id
+    = @content_item_revision.parent ? link_to(@content_item_revision.parent.identifier, content_item_content_item_revision_path(@content_item,@content_item_revision.parent)) : '(none)'
+  .field
+    = f.label :change_set
+    = f.select(:change_set_id, ChangeSet.all.collect {|a| [a.name, a.id]}, {selected: @content_item_revision.change_set_id}, {class: 'form-control'})
+  .actions
+    = f.submit 'Save'

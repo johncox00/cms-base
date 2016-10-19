@@ -1,0 +1,30 @@
+%h1 Content Item Revisions
+
+= link_to '+ New', new_content_item_content_item_revision_path(@content_item)
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th
+      %th Identifier
+      %th Parent
+      %th Created by
+      %th Last Modified By
+      %th Change Set
+      %th
+      %th
+
+
+  %tbody
+    - @content_item_revisions.each do |content_item_revision|
+      %tr
+        %td= link_to('New Revision', new_content_item_content_item_revision_path(@content_item, {parent: content_item_revision.id})) if can?(:create, ContentItemRevision)
+        %td= link_to content_item_revision.identifier, content_item_content_item_revision_path(@content_item, content_item_revision)
+        %td= content_item_revision.parent ? content_item_revision.parent.identifier : '(none)'
+        %td= content_item_revision.creator.email if content_item_revision.creator
+        %td= content_item_revision.modifier.email if content_item_revision.modifier
+        %td= link_to content_item_revision.change_set.name, content_item_revision.change_set if content_item_revision.change_set
+        %td= link_to('Edit', edit_content_item_content_item_revision_path(@content_item, content_item_revision)) if can?(:update, @content_item_revision)
+        %td= link_to('Delete', content_item_content_item_revision_path(@content_item,content_item_revision), :method => :delete, :data => { :confirm => 'Are you sure?' }) if can?(:destroy, @content_item_revision)
+
+%br

@@ -1,0 +1,20 @@
+/ Sidebar
+#sidebar-wrapper
+  %ul.sidebar-nav
+    %li.sidebar-brand
+      Content Management
+    %li
+      =link_to 'Dashboard', root_path
+    - if can? :read, ChangeSet
+      %li
+        = link_to 'Change Sets', change_sets_path
+    - if can? :read, ContentItem
+      %li
+        = link_to 'Content Items', content_items_path
+    - if can? :read, CmsPage
+      %li
+        = link_to 'Pages', cms_pages_path
+    - if can? :read, Offer
+      %li
+        = link_to 'Offers', offers_path
+/ /#sidebar-wrapper

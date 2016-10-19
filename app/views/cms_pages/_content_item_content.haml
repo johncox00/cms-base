@@ -1,0 +1,5 @@
+%ul
+  - content_items.each do |item|
+    %li
+      = item.identifier
+      = render partial: 'content_item_content', locals: {content_items: item.contained}

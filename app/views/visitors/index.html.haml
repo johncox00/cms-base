@@ -1,0 +1,56 @@
+
+%h1 Sling Management Portal
+%p Welcome! If you're here to help yourself to some data management, you've come to the right place!
+
+.row
+  .col-lg-4
+    %h2 Pages
+    %b= CmsPage.all.count
+  .col-lg-4
+    %h2 Content Items
+    %b= ContentItem.all.count
+  .col-lg-4
+    %h2 Total Revisions
+    %b= ContentItemRevision.all.count
+.row
+  .col-lg-4
+    %h2 Upcoming Change Sets
+    - future_changes = ChangeSet.future.take(4)
+    - if future_changes.count > 0
+      %table.table.table-striped
+        %thead
+          %tr
+            %td Date
+            %td Description
+            %td State
+          - future_changes.each do |c|
+            %tr
+              %td
+                =c.active_at
+              %td= link_to c.name, c
+              %td
+                =c.workflow_state
+    - else
+      (none)
+  .col-lg-4
+    %h2 Current Change Sets
+    - current_changes = ChangeSet.current
+    - if current_changes.count > 0
+      %table.table.table-striped
+        %thead
+          %tr
+            %td Date
+            %td Description
+            %td State
+          - current_changes.each do |c|
+            %tr
+              %td c.active_at
+              %td= link_to c.name, c
+              %td c.workflow_state
+-#   Make sure to keep all page content within the
+-#   = succeed "." do
+-#     %code #page-content-wrapper
+-# %a#menu-toggle.btn.btn-default{:href => "#menu-toggle"} Toggle Menu
+/ /#page-content-wrapper
+/ /#wrapper
+/ Menu Toggle Script

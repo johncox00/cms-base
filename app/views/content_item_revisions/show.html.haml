@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b= @content_item_revision.identifier
+%p
+  %b Content:
+  = raw(@content_item_revision.content)
+%p
+  %b Parent:
+  = @content_item_revision.parent ? link_to(@content_item_revision.parent.identifier, content_item_content_item_revision_path(@content_item, @content_item_revision.parent)) : '(none)'
+%p
+  %b Children:
+  - @content_item_revision.children.each do |child|
+    = link_to child.identifier, child
+%p
+  %b Created by:
+  = @content_item_revision.creator.email if @content_item_revision.creator
+%p
+  %b Last modified by:
+  = @content_item_revision.modifier.email if @content_item_revision.modifier
+%p
+  %b Change set:
+  = link_to @content_item_revision.change_set.name, @content_item_revision.change_set
+
+= link_to 'Edit', edit_content_item_content_item_revision_path(@content_item, @content_item_revision)
+\|
+= link_to 'Back', content_item_content_item_revisions_path(@content_item)

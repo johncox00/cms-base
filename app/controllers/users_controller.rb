@@ -1,17 +1,15 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
   before_action :admin_only, :except => :show
-
+  load_and_authorize_resource
   def index
     @users = User.all
   end
 
   def show
     @user = User.find(params[:id])
-    unless current_user.admin?
-      unless @user == current_user
-        redirect_to :back, :alert => "Access denied."
-      end
+    unless @user == current_user
+      redirect_to users_path, :alert => "Access denied."
     end
   end
 
@@ -21,6 +19,17 @@ class UsersController < ApplicationController
       redirect_to users_path, :notice => "User updated."
     else
       redirect_to users_path, :alert => "Unable to update user."
+    end
+  end
+
+  def update_roles
+    @user = User.find(params[:id])
+    secure_params[:roles].each do |role|
+      role[:action] == "add" ? @user.role_list.add(role[:role]) : @user.role_list.remove(role[:role])
+      @user.save
+    end
+    respond_to do |format|
+      format.json{render json: @user}
     end
   end
 
@@ -36,10 +45,12 @@ class UsersController < ApplicationController
     unless current_user.admin?
       redirect_to :back, :alert => "Access denied."
     end
+  rescue ActionController::RedirectBackError
+    redirect_to root_path
   end
 
   def secure_params
-    params.require(:user).permit(:role)
+    params.require(:user).permit(:roles => [:role, :action])
   end
 
 end
